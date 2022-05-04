@@ -1,4 +1,7 @@
 "use strict";
+
+//заглушка
+
 class ProductList {
   constructor(/*container = '.products'*/) {
     this.container = document.querySelector('.products');
