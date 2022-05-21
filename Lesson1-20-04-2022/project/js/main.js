@@ -1,78 +1,108 @@
 "use strict";
 
-//заглушка
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
-class ProductList {
-  constructor(/*container = '.products'*/) {
-    this.container = document.querySelector('.products');
-    this.goods = [];
-    this.productObjects = [];
-  }
+const app = new Vue({
+    el: '#app',
+    data: {
+        catalogUrl: '/catalogData.json',
+        products: [],
+        imgCatalog: 'https://via.placeholder.com/200x150'
+    },
+    methods: {
+        getJson(url) {
+            return fetch(url)
+                .then(result => result.json())
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        addProduct(product) {
+            console.log(product.id_product);
+        }
+    },
+    mounted() {
+        this.getJson(`${API + this.catalogUrl}`)
+            .then(data => {
+                for (let el of data) {
+                    this.products.push(el);
+                }
+        });
+    },
+});
 
-  /** метод записывает массив товаров в this.goods
-   *
-   */
-  fetchGoods() {
-    this.goods = [
-      {id: 1, title: 'Notebook', price: 20000},
-      {id: 2, title: 'Mouse', price: 1500},
-      {id: 3, title: 'Keyboard', price: 5000},
-      {id: 4, title: 'Gamepad', price: 4500},
-    ];
-  }
 
-  /** метод записывает в this.productObjects каждый товар и вставляет HTML разметку этого товара
-   * 
-   */
-  render() {
-    for (const good of this.goods) {
-      const productObject = new ProductItem(good);
-      // console.log(productObject);
-      this.productObjects.push(productObject);
+// class ProductList {
+//   constructor(/*container = '.products'*/) {
+//     this.container = document.querySelector('.products');
+//     this.goods = [];
+//     this.productObjects = [];
+//   }
 
-      this.container.insertAdjacentHTML('beforeend', productObject.getHTMLString());
-    }
-  }
+//   /** метод записывает массив товаров в this.goods
+//    *
+//    */
+//   fetchGoods() {
+//     this.goods = [
+//       {id: 1, title: 'Notebook', price: 20000},
+//       {id: 2, title: 'Mouse', price: 1500},
+//       {id: 3, title: 'Keyboard', price: 5000},
+//       {id: 4, title: 'Gamepad', price: 4500},
+//     ];
+//   }
 
-  /** метод суммирует стоимость всех товаров
-   * 
-   */
-  calcSumm() {
-    let summ = 0;
-    this.productObjects.forEach (good => {
-      summ += good.price;
-    });
-    console.log(summ);
-  }
-}
+//   /** метод записывает в this.productObjects каждый товар и вставляет HTML разметку этого товара
+//    * 
+//    */
+//   render() {
+//     for (const good of this.goods) {
+//       const productObject = new ProductItem(good);
+//       // console.log(productObject);
+//       this.productObjects.push(productObject);
 
-class ProductItem {
-  constructor(product, img='https://via.placeholder.com/200x150') {
-    this.id = product.id;
-    this.title = product.title;
-    this.price = product.price;
-    this.img = img;
-  }
-  /**
-   * 
-   * @returns возвращает HTML разметку товара
-   */
-  getHTMLString() {
-    return `<div class="product-item" data-id="${this.id}">
-                <img src="${this.img}" alt="Some img">
-                <div class="desc">
-                    <h3>${this.title}</h3>
-                    <p>${this.price} \u20bd</p>
-                    <button class="buy-btn">Купить</button>
-                </div>
-            </div>`;
-  }
-}
+//       this.container.insertAdjacentHTML('beforeend', productObject.getHTMLString());
+//     }
+//   }
 
-const list = new ProductList();
-list.fetchGoods();
-list.render();
-list.calcSumm();
+//   /** метод суммирует стоимость всех товаров
+//    * 
+//    */
+//   calcSumm() {
+//     let summ = 0;
+//     this.productObjects.forEach (good => {
+//       summ += good.price;
+//     });
+//     console.log(summ);
+//   }
+// }
+
+// class ProductItem {
+//   constructor(product, img='https://via.placeholder.com/200x150') {
+//     this.id = product.id;
+//     this.title = product.title;
+//     this.price = product.price;
+//     this.img = img;
+//   }
+//   /**
+//    * 
+//    * @returns возвращает HTML разметку товара
+//    */
+//   getHTMLString() {
+//     return `<div class="product-item" data-id="${this.id}">
+//                 <img src="${this.img}" alt="Some img">
+//                 <div class="desc">
+//                     <h3>${this.title}</h3>
+//                     <p>${this.price} \u20bd</p>
+//                     <button class="buy-btn">Купить</button>
+//                 </div>
+//             </div>`;
+//   }
+// }
+
+// const list = new ProductList();
+// list.fetchGoods();
+// list.render();
+// list.calcSumm();
 
 
 
